@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BsPlus, BsDash } from 'react-icons/bs';
 import { Modal, Button } from 'react-bootstrap';
@@ -6,23 +6,33 @@ import { Modal, Button } from 'react-bootstrap';
 const ItemListContainer = ({ product, cartItems, setCartItems }) => {
   const { id, img, productName, productDescription, productPrice } = product;
   const [showModal, setShowModal] = useState(false);
+  const [contador, setContador] = useState({});
+
+  const addToCantidad = () => {
+    setContador(prevContador => ({
+      ...prevContador,
+      [id]: (prevContador[id] || 0) + 1
+    }));
+  };
 
   const addToCart = () => {
-    const itemIndex = cartItems.findIndex(item => item.id === product.id);
+    const itemIndex = Object.keys(contador).findIndex(key => key === id);
 
     if (itemIndex !== -1) {
-      // Si el producto ya existe en el carrito, incrementa la cantidad
+      // Si el producto ya existe en el contador, incrementa la cantidad en el carrito
       const updatedItems = [...cartItems];
-      updatedItems[itemIndex].quantity += 1;
+      const index = updatedItems.findIndex(item => item.id === id);
+      updatedItems[index].quantity += contador[id];
       setCartItems(updatedItems);
     } else {
-      // Si el producto no existe en el carrito, agrega el producto con la cantidad 1
-      setCartItems(prevItems => [...prevItems, { ...product, quantity: 1 }]);
+      // Si el producto no existe en el contador, agrega el producto al carrito con la cantidad correspondiente
+      const quantity = contador[id] || 1;
+      setCartItems(prevItems => [...prevItems, { ...product, quantity }]);
     }
   };
 
   const removeFromCart = () => {
-    const itemIndex = cartItems.findIndex(item => item.id === product.id);
+    const itemIndex = cartItems.findIndex(item => item.id === id);
 
     if (itemIndex !== -1 && cartItems[itemIndex].quantity > 0) {
       // Si el producto existe en el carrito y tiene cantidad mayor a 0, decrementa la cantidad
@@ -30,9 +40,14 @@ const ItemListContainer = ({ product, cartItems, setCartItems }) => {
       updatedItems[itemIndex].quantity -= 1;
       setCartItems(updatedItems);
     }
+
+    setContador(prevContador => ({
+      ...prevContador,
+      [id]: (prevContador[id] || 0) - 1
+    }));
   };
 
-  const quantity = cartItems.find(item => item.id === product.id)?.quantity || 0;
+  const quantity = cartItems.find(item => item.id === id)?.quantity || 0;
 
   const openModal = () => {
     setShowModal(true);
@@ -41,6 +56,7 @@ const ItemListContainer = ({ product, cartItems, setCartItems }) => {
   const closeModal = () => {
     setShowModal(false);
   };
+
 
   return (
     <div className="col col-sm-12 col-md-6 col-lg-4 my-4">
@@ -91,12 +107,11 @@ const ItemListContainer = ({ product, cartItems, setCartItems }) => {
           </button>
           <div className='my-2' >
             <button onClick={removeFromCart}><BsDash /></button>
-            <span>{quantity}</span>
-            <button onClick={addToCart}><BsPlus /></button>
+            <span>{contador[id] || 0}</span>
+            <button onClick={addToCantidad}><BsPlus /></button>
           </div>
         </div>
       </div>
-
     </div>
   );
 };
