@@ -29,7 +29,7 @@ function RouterBrowser() {
     <BrowserRouter>
       <IndexMenu navBar_properties={navBar_properties} cartItems={cartItems} />
       <Routes>
-        <Route exact path={'/Home'} element={<Home />} />
+        <Route path={'/Home'} element={<Home />} />
         <Route path={'/Item/:id'} element={<ItemDetails />} />
         <Route
           path={'/CartWidgetPage'}
