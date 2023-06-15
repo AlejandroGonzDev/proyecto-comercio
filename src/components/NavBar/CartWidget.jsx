@@ -1,16 +1,13 @@
 import React from 'react';
-import { BsCart } from "react-icons/bs";
+import { BsCart } from 'react-icons/bs';
 
-
-
-function CartWidget() {
-
+function CartWidget({ totalQuantity }) {
   return (
-    <div >
-      <div className="nav-link active" aria-current="page" > <BsCart /> 5 </div>
-      
+    <div>
+      <BsCart />
+      <span>{totalQuantity}</span>
     </div>
-  )
+  );
 }
 
 export default CartWidget;

@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { BsCart } from 'react-icons/bs';
 import CartWidget from './CartWidget';
 import { Modal, Button } from 'react-bootstrap';
 
-function calculateTotalValue(items) {
-  return items.reduce((total, item) => total + item.quantity * item.productPrice, 0);
-}
-
-function IndexMenu({ navBarProperties, cartItems, onUpdateItems }) {
+function IndexMenu({ navBar_properties, cartItems, onUpdateItems }) {
   const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
   const [showCartModal, setShowCartModal] = useState(false);
 
@@ -19,8 +14,6 @@ function IndexMenu({ navBarProperties, cartItems, onUpdateItems }) {
   const closeCartModal = () => {
     setShowCartModal(false);
   };
-
- 
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -41,7 +34,7 @@ function IndexMenu({ navBarProperties, cartItems, onUpdateItems }) {
         </button>
         <div className="collapse navbar-collapse" id="navbarText">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            {navBarProperties.map(({ path, name }, index) => (
+            {navBar_properties.map(({ path, name }, index) => (
               <li key={index} className="nav-item">
                 <NavLink className={"nav-link active"} aria-current="page" to={path}>
                   {name}
@@ -58,7 +51,6 @@ function IndexMenu({ navBarProperties, cartItems, onUpdateItems }) {
       </div>
 
       {/* Cart Modal */}
-      <BsCart />
       <Modal show={showCartModal} onHide={closeCartModal}>
         <Modal.Header closeButton>
           <Modal.Title>Lista de productos agregados al carrito</Modal.Title>
@@ -94,6 +86,10 @@ function IndexMenu({ navBarProperties, cartItems, onUpdateItems }) {
       </Modal>
     </nav>
   );
+}
+
+function calculateTotalValue(items) {
+  return items.reduce((total, item) => total + item.quantity * item.productPrice, 0);
 }
 
 export default IndexMenu;
