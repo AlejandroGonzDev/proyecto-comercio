@@ -8,7 +8,7 @@ const CartWidgetPage = () => {
     <div>
       <div>
         <h1>Carrito de compras</h1>
-      <button className='btn btn-dark' onClick={()=>navigate(`/Home`)}>Seguir con las compras</button>
+        <button className='btn btn-dark' onClick={()=>navigate(`/Home`)}>Seguir con las compras</button>
       </div> 
       </div>
   )

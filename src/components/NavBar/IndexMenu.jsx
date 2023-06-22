@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 import CartWidget from './CartWidget';
 import { Modal, Button } from 'react-bootstrap';
 
@@ -53,7 +53,7 @@ function IndexMenu({ navBar_properties, cartItems, onUpdateItems }) {
       {/* Cart Modal */}
       <Modal show={showCartModal} onHide={closeCartModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Lista de productos agregados al carrito</Modal.Title>
+          <Modal.Title>Carrito de compras</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ul>

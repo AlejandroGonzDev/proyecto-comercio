@@ -5,6 +5,7 @@ import ItemDetails from "../pages/ItemDetails"
 import CartWidgetPage from '../pages/CartWidgetPage';
 import IndexMenu from '../components/NavBar/IndexMenu';
 
+
 function RouterBrowser() {
   const [cartItems, setCartItems] = React.useState([]);
 
@@ -22,7 +23,7 @@ function RouterBrowser() {
     },
     {
       path: '/CartWidgetPage',
-    },
+    }   
   ];
 
   return (
@@ -35,6 +36,7 @@ function RouterBrowser() {
           path={'/CartWidgetPage'}
           element={<CartWidgetPage cartItems={cartItems} onUpdateItems={updateItems} />}
         />
+       
       </Routes>
     </BrowserRouter>
   );
