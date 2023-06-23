@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { NavLink} from 'react-router-dom';
 import CartWidget from './CartWidget';
 import { Modal, Button } from 'react-bootstrap';
+import ModalCarrito from '../modals/ModalCarrito';
 
 function IndexMenu({ navBar_properties, cartItems, onUpdateItems }) {
   const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
@@ -52,37 +53,7 @@ function IndexMenu({ navBar_properties, cartItems, onUpdateItems }) {
 
       {/* Cart Modal */}
       <Modal show={showCartModal} onHide={closeCartModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Carrito de compras</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <ul>
-            {cartItems.map((item) => (
-              <li key={item.id}>
-                <div className="d-flex align-items-center">
-                  <img src={item.img} alt="Product" style={{ width: '50px', marginRight: '10px' }} />
-                  <span>{item.productName}</span>
-                </div>
-                <div>
-                  Cantidad: {item.quantity}
-                </div>
-                <div>
-                  Precio: {item.productPrice}
-                </div>
-                <div>
-                  <button onClick={() => onUpdateItems(item.id, 1)}>+</button>
-                  <button onClick={() => onUpdateItems(item.id, -1)}>-</button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </Modal.Body>
-        <Modal.Footer>
-          <div>
-            Valor total: {calculateTotalValue(cartItems)}
-          </div>
-          <Button variant="primary">Ir a pagar</Button>
-        </Modal.Footer>
+      <ModalCarrito />
       </Modal>
     </nav>
   );

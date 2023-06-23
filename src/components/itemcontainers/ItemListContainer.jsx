@@ -1,53 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { BsPlus, BsDash } from 'react-icons/bs';
 import { Modal, Button } from 'react-bootstrap';
+import ModalCarrito from '../modals/ModalCarrito';
 
 const ItemListContainer = ({ product, cartItems, setCartItems }) => {
   const { id, img, productName, productDescription, productPrice } = product;
   const [showModal, setShowModal] = useState(false);
-  const [contador, setContador] = useState({});
-
-  const addToCantidad = () => {
-    setContador(prevContador => ({
-      ...prevContador,
-      [id]: (prevContador[id] || 0) + 1
-    }));
-  };
+  const [showModal1, setShowModal1] = useState(false); // Agregado
+  const [contador, setContador] = useState(0);
 
   const addToCart = () => {
-    const itemIndex = Object.keys(contador).findIndex(key => key === id);
-
-    if (itemIndex !== -1) {
-      // Si el producto ya existe en el contador, incrementa la cantidad en el carrito
-      const updatedItems = [...cartItems];
-      const index = updatedItems.findIndex(item => item.id === id);
-      updatedItems[index].quantity += contador[id];
-      setCartItems(updatedItems);
-    } else {
-      // Si el producto no existe en el contador, agrega el producto al carrito con la cantidad correspondiente
-      const quantity = contador[id] || 1;
-      setCartItems(prevItems => [...prevItems, { ...product, quantity }]);
-    }
+    const newItem = {
+      id,
+      img,
+      productName,
+      productDescription,
+      productPrice,
+      quantity: contador,
+      itemValue: productPrice * contador,
+    };
+    setCartItems((prevItems) => [...prevItems, newItem]);
+    setContador(0);
   };
 
-  const removeFromCart = () => {
-    const itemIndex = cartItems.findIndex(item => item.id === id);
-
-    if (itemIndex !== -1 && cartItems[itemIndex].quantity > 0) {
-      // Si el producto existe en el carrito y tiene cantidad mayor a 0, decrementa la cantidad
-      const updatedItems = [...cartItems];
-      updatedItems[itemIndex].quantity -= 1;
-      setCartItems(updatedItems);
-    }
-
-    setContador(prevContador => ({
-      ...prevContador,
-      [id]: (prevContador[id] || 0) - 1
-    }));
+  const removeFromCart = (itemId) => {
+    const updatedItems = cartItems.map((item) => {
+      if (item.id === itemId) {
+        const updatedItem = { ...item };
+        updatedItem.quantity -= 1;
+        updatedItem.itemValue = updatedItem.productPrice * updatedItem.quantity;
+        return updatedItem;
+      }
+      return item;
+    });
+    setCartItems(updatedItems);
   };
-
-  const quantity = cartItems.find(item => item.id === id)?.quantity || 0;
 
   const openModal = () => {
     setShowModal(true);
@@ -57,60 +44,55 @@ const ItemListContainer = ({ product, cartItems, setCartItems }) => {
     setShowModal(false);
   };
 
+  const openModal1 = () => {
+    setShowModal1(true);
+  };
+
+  const closeModal1 = () => {
+    setShowModal1(false);
+  };
 
   return (
-    <div className="col col-sm-12 col-md-6 col-lg-4 my-4">
-      <div className='card'>
-        <img src={img} className="card-img-top" style={{ height: "600px" }} alt={productName} />
+    <div className="col-12 col-md-3 mb-4">
+      <div className="card">
+        <img src={img} className="card-img-top" alt="Product" />
         <div className="card-body">
-          <h3 className="card-title fs-4 text-center aling-items-center text-uppercase">{productName}</h3>
+          <h3 className="card-title">{productName}</h3>
+          <p className="card-text">{productPrice}</p>
+          <button onClick={openModal} className="btn btn-warning">
+            Ver más
+          </button>
+          <button onClick={openModal1} className="btn btn-warning">
+            Ver carrito
+          </button>
         </div>
-        <div className="d-flex align-items-center justify-content-center"> {/* Add 'justify-content-center' class */}
-          <div className="col col-8">
-            <p className="text-uppercase" style={{ marginLeft: '-100px' }}>Precio</p>
-          </div>
-          <div className="col col-4">
-            <span className="ml-3 fs-6 col col-6 text-right" style={{ marginLeft: '-100px' }}>
-              USD ${productPrice}
-            </span>
-          </div>
-        </div>
-
-        <div className='container my-2aling-items-center' style={{ display: 'flex', justifyContent: 'center' }}><button onClick={openModal} className="btn btn-warning">
-          Ver más
-        </button>
-        </div>
-
-
-        {/* Modal */}
         <Modal show={showModal} onHide={closeModal}>
           <Modal.Header closeButton>
             <Modal.Title>{productName}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <img src={img} className="card-img-top" alt="..." />
+            <img src={img} className="card-img-top" alt="Product" />
             <p className="card-text">{productDescription}</p>
-            <p className="card-text">$ {productPrice}</p>
+            <p className="card-text">{productPrice}</p>
+            <div>
+              <button onClick={() => setContador((prevCount) => Math.max(prevCount - 1, 0))}>
+                <BsDash />
+              </button>
+              <span>{contador}</span>
+              <button onClick={() => setContador((prevCount) => prevCount + 1)}>
+                <BsPlus />
+              </button>
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <button onClick={addToCart} className="btn btn-warning">
               Agregar al carrito
             </button>
-            <button onClick={removeFromCart}><BsDash /></button>
-            <span>{quantity}</span>
-            <button onClick={addToCart}><BsPlus /></button>
           </Modal.Footer>
         </Modal>
-        <div className='my-2 aling-items-center'>
-          <button onClick={addToCart} className="btn btn-warning">
-            Agregar al carrito
-          </button>
-          <div className='my-2' >
-            <button onClick={removeFromCart}><BsDash /></button>
-            <span>{contador[id] || 0}</span>
-            <button onClick={addToCantidad}><BsPlus /></button>
-          </div>
-        </div>
+        <Modal show={showModal1} onHide={closeModal1}>
+          <ModalCarrito cartItems={cartItems} removeFromCart={removeFromCart} />
+        </Modal>
       </div>
     </div>
   );
