@@ -5,7 +5,7 @@ function CartWidget({ totalQuantity }) {
   return (
     <div>
       <BsCart />
-      <span>{totalQuantity}</span>
+      {totalQuantity > 0 && <span>{totalQuantity}</span>}
     </div>
   );
 }

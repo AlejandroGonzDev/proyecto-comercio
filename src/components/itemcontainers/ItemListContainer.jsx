@@ -6,7 +6,7 @@ import ModalCarrito from '../modals/ModalCarrito';
 const ItemListContainer = ({ product, cartItems, setCartItems }) => {
   const { id, img, productName, productDescription, productPrice } = product;
   const [showModal, setShowModal] = useState(false);
-  const [showModal1, setShowModal1] = useState(false); // Agregado
+  const [showModal1, setShowModal1] = useState(false);
   const [contador, setContador] = useState(0);
 
   const addToCart = () => {
@@ -21,19 +21,20 @@ const ItemListContainer = ({ product, cartItems, setCartItems }) => {
     };
     setCartItems((prevItems) => [...prevItems, newItem]);
     setContador(0);
+    setShowModal(false); // Cerrar el modal de detalle de producto al agregar al carrito
   };
 
   const removeFromCart = (itemId) => {
     const updatedItems = cartItems.map((item) => {
       if (item.id === itemId) {
         const updatedItem = { ...item };
-        updatedItem.quantity -= 1;
+        updatedItem.quantity = Math.max(updatedItem.quantity - 1, 0);
         updatedItem.itemValue = updatedItem.productPrice * updatedItem.quantity;
         return updatedItem;
       }
       return item;
     });
-    setCartItems(updatedItems);
+    setCartItems(updatedItems.filter((item) => item.quantity > 0));
   };
 
   const openModal = () => {
@@ -91,7 +92,7 @@ const ItemListContainer = ({ product, cartItems, setCartItems }) => {
           </Modal.Footer>
         </Modal>
         <Modal show={showModal1} onHide={closeModal1}>
-          <ModalCarrito cartItems={cartItems} removeFromCart={removeFromCart} />
+          <ModalCarrito cartItems={cartItems || []} removeFromCart={removeFromCart} />
         </Modal>
       </div>
     </div>
