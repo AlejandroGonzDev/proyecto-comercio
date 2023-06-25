@@ -1,3 +1,4 @@
+// NavBar.js
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import CartWidget from './CartWidget';
@@ -66,7 +67,7 @@ function NavBar({ navBar_properties, cartItems, setCartItems }) {
 
       {/* Cart Modal */}
       <Modal show={showCartModal} onHide={closeCartModal}>
-        <ModalCarrito cartItems={cartItems} removeFromCart={removeFromCart} totalQuantity={cartItems.length} />
+        <ModalCarrito cartItems={cartItems || []} removeFromCart={removeFromCart} />
       </Modal>
     </nav>
   );

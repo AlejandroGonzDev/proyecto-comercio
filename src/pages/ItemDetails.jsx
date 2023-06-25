@@ -3,13 +3,13 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../Firebase.config';
 
 const ItemDetails = ({ productId }) => {
-  const [product, setProduct] = useState();
+  const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const docRef = doc(db, 'productos', productId);
+        const docRef = doc(db, 'products', productId);
         const docSnapshot = await getDoc(docRef);
 
         if (docSnapshot.exists()) {

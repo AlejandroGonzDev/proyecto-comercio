@@ -1,9 +1,10 @@
+// ItemListContainer.js
 import React, { useState } from 'react';
 import { BsPlus, BsDash } from 'react-icons/bs';
 import { Modal, Button } from 'react-bootstrap';
 import ModalCarrito from '../modals/ModalCarrito';
 
-const ItemListContainer = ({ product, cartItems, setCartItems }) => {
+const ItemListContainer = ({ product, cartItems, setCartItems, openCartModal }) => {
   const { id, img, productName, productDescription, productPrice } = product;
   const [showModal, setShowModal] = useState(false);
   const [showModal1, setShowModal1] = useState(false);
@@ -22,6 +23,7 @@ const ItemListContainer = ({ product, cartItems, setCartItems }) => {
     setCartItems((prevItems) => [...prevItems, newItem]);
     setContador(0);
     setShowModal(false); // Cerrar el modal de detalle de producto al agregar al carrito
+    openCartModal(); // Llamar a la función para abrir el modal del carrito en NavBar
   };
 
   const removeFromCart = (itemId) => {
@@ -59,7 +61,7 @@ const ItemListContainer = ({ product, cartItems, setCartItems }) => {
         <img src={img} className="card-img-top" alt="Product" />
         <div className="card-body">
           <h3 className="card-title">{productName}</h3>
-          <p className="card-text">{productPrice}</p>
+          <p className="card-text">$ {productPrice}</p>
           <button onClick={openModal} className="btn btn-warning">
             Ver más
           </button>
@@ -74,7 +76,7 @@ const ItemListContainer = ({ product, cartItems, setCartItems }) => {
           <Modal.Body>
             <img src={img} className="card-img-top" alt="Product" />
             <p className="card-text">{productDescription}</p>
-            <p className="card-text">{productPrice}</p>
+            <p className="card-text">$ {productPrice}</p>
             <div>
               <button onClick={() => setContador((prevCount) => Math.max(prevCount - 1, 0))}>
                 <BsDash />
