@@ -1,38 +1,17 @@
 // NavBar.js
-import React, { useState } from 'react';
+import React,{useContext} from 'react';
+import { DataContext } from '../context/dataContext';
 import { NavLink } from 'react-router-dom';
-import CartWidget from './CartWidget';
-import { Modal } from 'react-bootstrap';
-import ModalCarrito from '../modals/ModalCarrito';
+import { BsCart } from 'react-icons/bs';
 
-function NavBar({ navBar_properties, cartItems, setCartItems }) {
-  const [showCartModal, setShowCartModal] = useState(false);
-
-  const openCartModal = () => {
-    setShowCartModal(true);
-  };
-
-  const closeCartModal = () => {
-    setShowCartModal(false);
-  };
-
-  const removeFromCart = (itemId) => {
-    const updatedItems = cartItems.map((item) => {
-      if (item.id === itemId) {
-        const updatedItem = { ...item };
-        updatedItem.quantity = Math.max(updatedItem.quantity - 1, 0);
-        updatedItem.itemValue = updatedItem.productPrice * updatedItem.quantity;
-        return updatedItem;
-      }
-      return item;
-    });
-    setCartItems(updatedItems.filter((item) => item.quantity > 0));
-  };
+function NavBar() {
+  const {cart} = useContext(DataContext)
+  const totalQuantity = cart.reduce((count, product) => count + product.quantity, 0)
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
-        <NavLink className="navbar-brand text-color-dark" to="/Home">
+        <NavLink className="navbar-brand text-color-dark" to={"/"}>
           Los Panas Store
         </NavLink>
         <button
@@ -48,27 +27,14 @@ function NavBar({ navBar_properties, cartItems, setCartItems }) {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarText">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            {navBar_properties.map(({ path, name }, index) => (
-              <li key={index} className="nav-item">
-                <NavLink className="nav-link active" aria-current="page" to={path}>
-                  {name}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
           <span className="navbar-text">
-            <div onClick={openCartModal} style={{ cursor: 'pointer' }}>
-              <CartWidget totalQuantity={cartItems.length} />
-            </div>
+            <NavLink className="nav-link active" aria-current="page" to={"/carrito"} style={{ cursor: 'pointer' }}>
+              <BsCart />
+                {totalQuantity > 0 && <span>{totalQuantity}</span>}
+            </NavLink>
           </span>
         </div>
       </div>
-
-      {/* Cart Modal */}
-      <Modal show={showCartModal} onHide={closeCartModal}>
-        <ModalCarrito cartItems={cartItems || []} removeFromCart={removeFromCart} />
-      </Modal>
     </nav>
   );
 }

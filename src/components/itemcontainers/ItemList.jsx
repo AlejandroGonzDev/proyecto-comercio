@@ -3,7 +3,7 @@ import ItemListContainer from "./ItemListContainer"
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../Firebase.config';
 
-function ItemList({ onUpdateItems }) {
+function ItemList() {
   const [productsList, setListedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cartItems, setCartItems] = useState([]);

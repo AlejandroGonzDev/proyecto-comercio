@@ -1,49 +1,22 @@
-// ItemListContainer.js
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { DataContext } from '../context/dataContext';
 import { BsPlus, BsDash } from 'react-icons/bs';
 import { Modal, Button } from 'react-bootstrap';
-import ModalCarrito from '../modals/ModalCarrito';
+import ModalCarrito from '../carrito/ModalCarrito';
 
-const ItemListContainer = ({ product, cartItems, setCartItems, openCartModal }) => {
-  const { id, img, productName, productDescription, productPrice } = product;
+const ItemListContainer = () => {
+  const { items, addToCart, removeFromCart } = useContext(DataContext);
   const [showModal, setShowModal] = useState(false);
   const [showModal1, setShowModal1] = useState(false);
-  const [contador, setContador] = useState(0);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const addToCart = () => {
-    const newItem = {
-      id,
-      img,
-      productName,
-      productDescription,
-      productPrice,
-      quantity: contador,
-      itemValue: productPrice * contador,
-    };
-    setCartItems((prevItems) => [...prevItems, newItem]);
-    setContador(0);
-    setShowModal(false); // Cerrar el modal de detalle de producto al agregar al carrito
-    openCartModal(); // Llamar a la función para abrir el modal del carrito en NavBar
-  };
-
-  const removeFromCart = (itemId) => {
-    const updatedItems = cartItems.map((item) => {
-      if (item.id === itemId) {
-        const updatedItem = { ...item };
-        updatedItem.quantity = Math.max(updatedItem.quantity - 1, 0);
-        updatedItem.itemValue = updatedItem.productPrice * updatedItem.quantity;
-        return updatedItem;
-      }
-      return item;
-    });
-    setCartItems(updatedItems.filter((item) => item.quantity > 0));
-  };
-
-  const openModal = () => {
+  const openModal = (product) => {
+    setSelectedProduct(product);
     setShowModal(true);
   };
 
   const closeModal = () => {
+    setSelectedProduct(null);
     setShowModal(false);
   };
 
@@ -56,47 +29,52 @@ const ItemListContainer = ({ product, cartItems, setCartItems, openCartModal }) 
   };
 
   return (
-    <div className="col-12 col-md-3 mb-4">
-      <div className="card">
-        <img src={img} className="card-img-top" alt="Product" />
-        <div className="card-body">
-          <h3 className="card-title">{productName}</h3>
-          <p className="card-text">$ {productPrice}</p>
-          <button onClick={openModal} className="btn btn-warning">
-            Ver más
-          </button>
-          <button onClick={openModal1} className="btn btn-warning">
-            Ver carrito
-          </button>
-        </div>
-        <Modal show={showModal} onHide={closeModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>{productName}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <img src={img} className="card-img-top" alt="Product" />
-            <p className="card-text">{productDescription}</p>
-            <p className="card-text">$ {productPrice}</p>
-            <div>
-              <button onClick={() => setContador((prevCount) => Math.max(prevCount - 1, 0))}>
-                <BsDash />
-              </button>
-              <span>{contador}</span>
-              <button onClick={() => setContador((prevCount) => prevCount + 1)}>
-                <BsPlus />
-              </button>
+    <div className="row">
+      {items.length > 0 &&
+        items.map((product) => (
+          <div className="col-12 col-md-3 mb-4" key={product.id}>
+            <div className="card">
+              <img src={product.img} className="card-img-top" alt="Product" />
+              <div className="card-body">
+                <h3 className="card-title">{product.productName}</h3>
+                <p className="card-text">$ {product.productPrice}</p>
+                <Button onClick={() => openModal(product)} className="btn btn-warning">
+                  Ver más
+                </Button>
+                <Button onClick={openModal1} className="btn btn-warning">
+                  Ver en carrito
+                </Button>
+              </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <button onClick={addToCart} className="btn btn-warning">
-              Agregar al carrito
-            </button>
-          </Modal.Footer>
-        </Modal>
-        <Modal show={showModal1} onHide={closeModal1}>
-          <ModalCarrito cartItems={cartItems || []} removeFromCart={removeFromCart} />
-        </Modal>
-      </div>
+          </div>
+        ))}
+        
+      <Modal show={showModal} onHide={closeModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>{selectedProduct && selectedProduct.productName}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedProduct && (
+            <>
+              <img src={selectedProduct.img} className="card-img-top" alt="Product" />
+              <p className="card-text">{selectedProduct.productDescription}</p>
+              <p className="card-text">$ {selectedProduct.productPrice}</p>
+              <div>
+                <Button onClick={() => removeFromCart(selectedProduct)} className="btn btn-warning">
+                <BsDash />
+                </Button>
+                <p className="qtt">{selectedProduct.quantity}</p>
+                <Button onClick={() => addToCart(selectedProduct)} className="btn btn-warning">
+                <BsPlus />
+                </Button>
+              </div>
+            </>
+          )}
+        </Modal.Body>
+      </Modal>
+      <Modal show={showModal1} onHide={closeModal1}>
+        <ModalCarrito />
+      </Modal>
     </div>
   );
 };
