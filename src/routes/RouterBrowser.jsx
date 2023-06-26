@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route} from 'react-router-dom';
-import DataProvider from '../components/context/dataContext';
+import DataProvider from '../context/dataContext';
 import Home from '../pages/Home';
 import IndexMenu from '../components/NavBar/IndexMenu';
-import CartContent from '../components/carrito/CartContent';
+import CartContent from '../carrito/CartContent';
 
 
 function RouterBrowser() {

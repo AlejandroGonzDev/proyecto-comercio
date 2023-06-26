@@ -1,6 +1,6 @@
 import React, {useContext} from 'react'
 import ModalCarrito from './ModalCarrito'
-import { DataContext } from '../footer/dataContext'
+import { DataContext } from '../context/dataContext';
 import { CartTotal } from './CartTotal';
 
 import './cartcontent.css';
@@ -16,7 +16,7 @@ const CartContent = () => {
     </>
     
   ) : (
-    <h2 className='cartMsg'> No tienes productos en tu carrito</h2>
+    <h2 className='cartMsg'>No tienes productos en tu carrito</h2>
   )
 }
 

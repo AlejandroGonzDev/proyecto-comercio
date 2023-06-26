@@ -1,17 +1,17 @@
 import React from 'react';
 import './App.css';
 import RuoterBrowser from './routes/RouterBrowser';
+import Background from './background/BackGround';
 
 
 function App() {
   return (
-    <div className="App">    
+    <Background>   
     
     <RuoterBrowser />
-    
    
     
-    </div>
+    </Background>
   );
 }
 

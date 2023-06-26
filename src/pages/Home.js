@@ -1,12 +1,12 @@
 import React from 'react'
 import Footer from "../footer/Footer"
-import ItemList from '../components/itemcontainers/ItemList';
+import ItemListContainer from '../components/itemcontainers/ItemListContainer';
 
 function Home() {
   return (
-    <div>     
-      <ItemList />
-      <Footer/>    
+    <div>
+      <ItemListContainer />
+      <Footer/>
     </div>
   )
 }

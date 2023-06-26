@@ -4,3 +4,19 @@
     flex-wrap: wrap;
     margin: 30px;
 }
+
+.cartContent > img {
+    height: 120px;
+    width: 100px;
+    text-align: center;
+
+}
+
+.cartTotal {
+    text-align: center;
+}
+
+.cartMsg {
+    text-align: center;
+    margin-top: 20rem; 
+}

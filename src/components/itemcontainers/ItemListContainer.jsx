@@ -1,8 +1,10 @@
 import React, { useState, useContext } from 'react';
-import { DataContext } from '../context/dataContext';
+import { DataContext } from '../../context/dataContext';
 import { BsPlus, BsDash } from 'react-icons/bs';
 import { Modal, Button } from 'react-bootstrap';
-import ModalCarrito from '../carrito/ModalCarrito';
+import ModalCarrito from '../../carrito/ModalCarrito';
+
+import "./itemcontainer.css"
 
 const ItemListContainer = () => {
   const { items, addToCart, removeFromCart } = useContext(DataContext);
@@ -32,23 +34,25 @@ const ItemListContainer = () => {
     <div className="row">
       {items.length > 0 &&
         items.map((product) => (
-          <div className="col-12 col-md-3 mb-4" key={product.id}>
+          <div className="col-12 col-md-4" key={product.id}>
             <div className="card">
               <img src={product.img} className="card-img-top" alt="Product" />
               <div className="card-body">
                 <h3 className="card-title">{product.productName}</h3>
                 <p className="card-text">$ {product.productPrice}</p>
+                <div className="button-container">
                 <Button onClick={() => openModal(product)} className="btn btn-warning">
                   Ver más
                 </Button>
                 <Button onClick={openModal1} className="btn btn-warning">
                   Ver en carrito
                 </Button>
+                </div>
               </div>
             </div>
           </div>
         ))}
-        
+
       <Modal show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
           <Modal.Title>{selectedProduct && selectedProduct.productName}</Modal.Title>
@@ -61,11 +65,11 @@ const ItemListContainer = () => {
               <p className="card-text">$ {selectedProduct.productPrice}</p>
               <div>
                 <Button onClick={() => removeFromCart(selectedProduct)} className="btn btn-warning">
-                <BsDash />
+                  <BsDash />
                 </Button>
                 <p className="qtt">{selectedProduct.quantity}</p>
                 <Button onClick={() => addToCart(selectedProduct)} className="btn btn-warning">
-                <BsPlus />
+                  <BsPlus />
                 </Button>
               </div>
             </>

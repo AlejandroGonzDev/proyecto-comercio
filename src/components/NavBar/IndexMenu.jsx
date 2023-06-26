@@ -1,6 +1,6 @@
 // NavBar.js
 import React,{useContext} from 'react';
-import { DataContext } from '../context/dataContext';
+import { DataContext } from '../../context/dataContext';
 import { NavLink } from 'react-router-dom';
 import { BsCart } from 'react-icons/bs';
 

@@ -1,5 +1,5 @@
 import React,{useContext} from 'react';
-import { DataContext } from '../footer/dataContext';
+import { DataContext } from '../context/dataContext';
 import { BsPlus, BsDash } from 'react-icons/bs';
 import { Button } from 'react-bootstrap';
 
