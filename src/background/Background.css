@@ -2,7 +2,7 @@ body {
     background-color: #f2f2f2;
     background-image: url('https://img.freepik.com/free-vector/perspective-japanese-street-neon-lights_52683-44988.jpg?w=1380&t=st=1687817790~exp=1687818390~hmac=1ba86ffa47dd98f08ae19b59a8b8ee487ff9d9dc1a5d5a25faa23de648b4de95');
     background-repeat: no-repeat; 
-    background-size: all;
+    background-size: 100% 100%;
   }
   
   .container {

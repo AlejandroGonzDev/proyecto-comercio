@@ -34,7 +34,7 @@ const ItemListContainer = () => {
     <div className="row">
       {items.length > 0 &&
         items.map((product) => (
-          <div className="col-12 col-md-4" key={product.id}>
+          <div className="col-12 col-md-3 mb-3" key={product.id}>
             <div className="card">
               <img src={product.img} className="card-img-top" alt="Product" />
               <div className="card-body">
