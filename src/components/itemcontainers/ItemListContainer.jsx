@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { DataContext } from '../context/dataContext';
+import { DataContext } from '../../context/dataContext';
 import { BsPlus, BsDash } from 'react-icons/bs';
 import { Modal, Button } from 'react-bootstrap';
-import ModalCarrito from '../carrito/ModalCarrito';
-import './items.css'
+import ModalCarrito from "../../carrito/ModalCarrito"
+import './itemcontainer.css'
 
 const ItemListContainer = () => {
   const { items, addToCart, removeFromCart } = useContext(DataContext);
