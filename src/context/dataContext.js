@@ -1,5 +1,6 @@
+// DataProvider.js
 import React, { createContext, useEffect, useState } from "react";
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from "../Firebase.config";
 
 export const DataContext = createContext();
@@ -7,11 +8,18 @@ export const DataContext = createContext();
 const DataProvider = ({ children }) => {
   const [items, setItems] = useState([]);
   const [cart, setCart] = useState([]);
+  const [selectedOption, setSelectedOption] = useState('');
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'products'));
+        let queryRef = collection(db, 'products');
+
+        if (selectedOption) {
+          queryRef = query(queryRef, where('categorie', '==', selectedOption));
+        }
+
+        const querySnapshot = await getDocs(queryRef);
         const lista = querySnapshot.docs.map((producto) => ({
           id: producto.id,
           ...producto.data(),
@@ -23,11 +31,9 @@ const DataProvider = ({ children }) => {
     };
 
     fetchItems();
-  }, []);
+  }, [selectedOption]);
 
   const addToCart = (product) => {
-    // setCart ([...cart, product])
-
     const existingProduct = cart.find((item) => item.id === product.id);
 
     if (existingProduct) {
@@ -35,7 +41,7 @@ const DataProvider = ({ children }) => {
         item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
       ));
     } else {
-      setCart([...cart, { ...product, quantity: 1}]);
+      setCart([...cart, { ...product, quantity: 1 }]);
     }
   };
 
@@ -43,18 +49,15 @@ const DataProvider = ({ children }) => {
     const existingProduct = cart.find((item) => item.id === product.id);
 
     existingProduct.quantity !== 1 &&
-    setCart(cart.map((item) => (item.id === product.id ? { ...item, quantity: item.quantity - 1 } : item)));
+      setCart(cart.map((item) => (item.id === product.id ? { ...item, quantity: item.quantity - 1 } : item)));
 
-    existingProduct.quantity == 1 && 
-    setCart(cart.filter((item) => {
-      return item !== existingProduct
-    }
-   ))
-   
+
+    existingProduct.quantity === 1 &&
+      setCart(cart.filter((item) => item !== existingProduct));
   };
 
   return (
-    <DataContext.Provider value={{ items, cart, setCart, addToCart, removeFromCart  }}>
+    <DataContext.Provider value={{ items, cart, setCart, addToCart, removeFromCart, selectedOption, setSelectedOption }}>
       {children}
     </DataContext.Provider>
   );
